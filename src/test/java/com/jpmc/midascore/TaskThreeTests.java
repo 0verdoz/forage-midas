@@ -1,5 +1,7 @@
 package com.jpmc.midascore;
 
+import com.jpmc.midascore.entity.UserRecord;
+import com.jpmc.midascore.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,9 @@ public class TaskThreeTests {
     @Autowired
     private FileLoader fileLoader;
 
+    @Autowired
+    private UserRepository userRepo;
+
     @Test
     void task_three_verifier() throws InterruptedException {
         userPopulator.populate();
@@ -40,6 +45,10 @@ public class TaskThreeTests {
         logger.info("kill this test once you find the answer");
         while (true) {
             Thread.sleep(20000);
+            userRepo.findByName("waldorf").ifPresentOrElse(
+                    w -> logger.info("Waldorf's final balance: " + Math.floor(w.getBalance())),
+                    () -> logger.error("Waldorf not found in DB!")
+            );
             logger.info("...");
         }
     }
